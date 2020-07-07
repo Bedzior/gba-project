@@ -14,6 +14,10 @@ function(createGBATarget)
         IMPORTED_LOCATION
             ${DEVKITPRO_GBA}
     )
+    target_link_directories(GBA_CORE
+        INTERFACE
+            ${DEVKITARM}/arm-none-eabi/lib
+    )
     target_include_directories(GBA_CORE
         INTERFACE
             ${DEVKITPRO}/libgba/include
