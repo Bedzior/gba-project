@@ -16,4 +16,4 @@ project(game)
     )
     add_gba_executable(${PROJECT_NAME}.elf)
 
-    target_link_libraries(${PROJECT_NAME}.elf GBA_CORE)
+    target_link_libraries(${PROJECT_NAME}.elf GBA::CORE)

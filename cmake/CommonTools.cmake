@@ -8,40 +8,40 @@ function(createGBATarget)
     find_library(DEVKITPRO_MM mm PATHS ${DEVKITPRO}/libgba/lib)
     find_library(DEVKITPRO_FAT fat PATHS ${DEVKITPRO}/libgba/lib)
 
-    # define GBA_CORE
-    add_library(GBA_CORE STATIC IMPORTED)
-    set_target_properties(GBA_CORE PROPERTIES
+    # define GBA::CORE
+    add_library(GBA::CORE STATIC IMPORTED)
+    set_target_properties(GBA::CORE PROPERTIES
         IMPORTED_LOCATION
             ${DEVKITPRO_GBA}
     )
-    target_link_directories(GBA_CORE
+    target_link_directories(GBA::CORE
         INTERFACE
             ${DEVKITARM}/arm-none-eabi/lib
     )
-    target_include_directories(GBA_CORE
+    target_include_directories(GBA::CORE
         INTERFACE
             ${DEVKITPRO}/libgba/include
             ${DEVKITARM}/arm-none-eabi/include
     )
 
-    #define GBA_AUDIO
-    add_library(GBA_AUDIO STATIC IMPORTED)
-    set_target_properties(GBA_AUDIO PROPERTIES
+    #define GBA::AUDIO
+    add_library(GBA::AUDIO STATIC IMPORTED)
+    set_target_properties(GBA::AUDIO PROPERTIES
         IMPORTED_LOCATION
             ${DEVKITPRO_MM}
     )
-    target_include_directories(GBA_AUDIO
+    target_include_directories(GBA::AUDIO
         INTERFACE
             ${DEVKITPRO}/libgba/include
     )
 
-    #define GBA_FAT
-    add_library(GBA_FAT STATIC IMPORTED)
-    set_target_properties(GBA_FAT PROPERTIES
+    #define GBA::FAT
+    add_library(GBA::FAT STATIC IMPORTED)
+    set_target_properties(GBA::FAT PROPERTIES
         IMPORTED_LOCATION
             ${DEVKITPRO_FAT}
     )
-    target_include_directories(GBA_FAT
+    target_include_directories(GBA::FAT
         INTERFACE
             ${DEVKITPRO}/libgba/include
     )
