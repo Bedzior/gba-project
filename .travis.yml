@@ -1,0 +1,40 @@
+language: cpp
+
+os:
+  - linux
+
+git:
+  depth: 1
+
+services:
+  - docker
+
+env:
+  global:
+    - BUILD_IMAGE=bedzior/devkitarm
+    - CONTAINER=build
+    - WORKDIR=/home/gba
+
+stages:
+  - build
+
+install:
+  - docker run
+        --cpus $(nproc)
+        --detach
+        --interactive
+        --name $CONTAINER
+        --tty
+        --volume $(pwd):$WORKDIR
+        $BUILD_IMAGE
+        /bin/bash
+
+jobs:
+  exclude:
+    - stage: test
+  include:
+  - stage: build
+    os: linux
+    name: "Build in Docker"
+    script:
+      - docker exec -w $WORKDIR $CONTAINER /bin/bash -c "./scripts/build.sh -c=Release"
