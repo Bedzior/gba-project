@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.15)
+
 function(createGBATarget)
     if (NOT EXISTS ${DEVKITPRO}/libgba/lib)
         message(FATAL_ERROR "Missing libGBA library files in ${DEVKITPRO}/libgba/lib")
@@ -6,16 +8,37 @@ function(createGBATarget)
     find_library(DEVKITPRO_MM mm PATHS ${DEVKITPRO}/libgba/lib)
     find_library(DEVKITPRO_FAT fat PATHS ${DEVKITPRO}/libgba/lib)
 
-    add_library(gba INTERFACE)
-    target_link_libraries(gba
-        INTERFACE
-            ${DEVKITPRO_FAT}
+    # define GBA_CORE
+    add_library(GBA_CORE STATIC IMPORTED)
+    set_target_properties(GBA_CORE PROPERTIES
+        IMPORTED_LOCATION
             ${DEVKITPRO_GBA}
-            ${DEVKITPRO_MM}
     )
-    target_include_directories(gba
+    target_include_directories(GBA_CORE
         INTERFACE
             ${DEVKITPRO}/libgba/include
             ${DEVKITARM}/arm-none-eabi/include
+    )
+
+    #define GBA_AUDIO
+    add_library(GBA_AUDIO STATIC IMPORTED)
+    set_target_properties(GBA_AUDIO PROPERTIES
+        IMPORTED_LOCATION
+            ${DEVKITPRO_MM}
+    )
+    target_include_directories(GBA_AUDIO
+        INTERFACE
+            ${DEVKITPRO}/libgba/include
+    )
+
+    #define GBA_FAT
+    add_library(GBA_FAT STATIC IMPORTED)
+    set_target_properties(GBA_FAT PROPERTIES
+        IMPORTED_LOCATION
+            ${DEVKITPRO_FAT}
+    )
+    target_include_directories(GBA_FAT
+        INTERFACE
+            ${DEVKITPRO}/libgba/include
     )
 endfunction()
