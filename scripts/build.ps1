@@ -15,26 +15,22 @@ ElseIf (Test-Path ".\scripts\variables.ps1") {
     . .\scripts\variables.ps1
 }
 
-$UNIX_ROOT = $ROOT -replace '\\','/'
-
-mkdir -Force -Path $BUILD
-Try {
-    Push-Location $BUILD
-    cmake `
-        -G "Unix Makefiles" `
-        -B $BUILD `
-        -S $ROOT `
-        -DCMAKE_BUILD_CONFIG=$BuildConfig `
-        -DCMAKE_INSTALL_PREFIX=$INSTALL
-} Finally {
-    Pop-Location
-}
+cmake `
+    -G "Unix Makefiles" `
+    -B $BUILD `
+    -S $ROOT `
+    -DCMAKE_BUILD_CONFIG=$BuildConfig `
+    -DCMAKE_INSTALL_PREFIX=$INSTALL
 If ($LASTEXITCODE -ne 0)
 {
     Exit $LASTEXITCODE
 }
 
-make -j 4 `
-    --directory $BUILD `
+cmake `
+    --build $BUILD `
+    --config $BuildConfig `
+    --target game.gba `
+    --parallel 4 `
+
 
 Exit $LASTEXITCODE

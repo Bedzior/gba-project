@@ -9,11 +9,11 @@ enable_language(ASM)
 include(ToolsGBA)
 include(CommonTools)
 
-project(game C CXX ASM)
+project(game)
     createGBATarget()
     add_executable(${PROJECT_NAME}.elf
         src/main.cpp
     )
-    target_link_libraries(${PROJECT_NAME}.elf gba mm)
-
     add_gba_executable(${PROJECT_NAME}.elf)
+
+    target_link_libraries(${PROJECT_NAME}.elf gba)
