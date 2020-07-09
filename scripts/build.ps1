@@ -7,12 +7,12 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-If (Test-Path ".\variables.ps1")
-{
-    . .\variables.ps1
-}
-ElseIf (Test-Path ".\scripts\variables.ps1") {
+If (Test-Path ".\scripts\variables.ps1") {
     . .\scripts\variables.ps1
+} Else {
+    Write-Error "Script is not run from root directory" `
+        -Category InvalidOperation `
+        -RecommendedAction "Run the script from project's root directory" `
 }
 
 cmake `
@@ -26,11 +26,13 @@ If ($LASTEXITCODE -ne 0)
     Exit $LASTEXITCODE
 }
 
+$PROC_COUNT = (Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors
+
 cmake `
     --build $BUILD `
     --config $BuildConfig `
     --target game.gba `
-    --parallel 4 `
+    --parallel $PROC_COUNT `
 
 
 Exit $LASTEXITCODE
