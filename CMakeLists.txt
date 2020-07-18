@@ -10,11 +10,20 @@ enable_language(ASM)
 include(ToolsGBA)
 include(CommonTools)
 
+set(CMAKE_CXX_STANDARD 17)
+
 project(game)
     createGBATarget()
+
+    add_subdirectory(src/system)
+
     add_executable(${PROJECT_NAME}.elf
         src/main.cpp
     )
-    add_gba_executable(${PROJECT_NAME}.elf)
+    target_link_libraries(${PROJECT_NAME}.elf
+        PRIVATE
+            System
+            GBA::CORE
+    )
 
-    target_link_libraries(${PROJECT_NAME}.elf GBA::CORE)
+    add_gba_executable(${PROJECT_NAME}.elf)

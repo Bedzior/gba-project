@@ -5,9 +5,22 @@
 #include <gba_input.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <fade.h>
+
+#include "system/System.hpp"
+
+static auto i = 0;
+
+void VblankInterrupt()
+{
+	scanKeys();
+}
 
 int main() {
+	System system;
 	irqInit();
+
+	irqSet(IRQ_VBLANK, VblankInterrupt);
 	irqEnable(IRQ_VBLANK);
 
 	consoleDemoInit();
@@ -16,7 +29,7 @@ int main() {
 
 	// ansi escape sequence to set print co-ordinates
 	// /x1b[line;columnH
-	iprintf("\x1b[10;10HHello World!");
+	iprintf("\x1b[10;10HHello, World!");
 
 	// ansi escape sequence to move cursor up
 	// /x1b[linesA
@@ -35,8 +48,11 @@ int main() {
 	iprintf("\x1b[5CColumn 20");
 
 	while (1) {
+		auto ticks = system.get_ticks_since_start();
+		auto secs = system.get_seconds_since_start();
+		fprintf(stdout, "Seconds passed since inception: %i", secs);
 		VBlankIntrWait();
 	}
 
-    return 0;
+    exit(0);
 }
