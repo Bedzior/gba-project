@@ -1,6 +1,4 @@
 project(System)
-
-    createLibToncTarget()
     add_library(${PROJECT_NAME} STATIC
         src/System.cpp
         interface/system/System.hpp
